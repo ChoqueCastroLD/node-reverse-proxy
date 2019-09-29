@@ -1,31 +1,45 @@
-const fs = require('fs');
-const path = require('path');
 const http = require('http');
 const httpProxy = require('http-proxy');
-
 const ndt = require('nodedomain-util');
+
 
 const proxy = httpProxy.createProxyServer({});
 
+function sendError(err, req, res) {
+    res.writeHead(500, {
+        'Content-Type': 'text/plain'
+    });
+    res.end(config.error_message);
+}
+proxy.on('error', sendError);
 
 let config = require('./config.js');
-setInterval( () => config = , 3000);
+setInterval(() => config = require('./config.js'), 3000);
 
-http.createServer( (req, res) => {
-    
-    const domain = ndt.getDomain(req.headers.host);
-    const subdomain = ndt.getSubDomain(req.headers.host);
+http.createServer((req, res) => {
+        req.on("error", sendError);
+        res.on("error", sendError);
 
-    let destino = config["domains"][domain][subdomain];
-    
-    if(!destino) destino = config["fallback"];    
+        let portsuffix = ':' + config.port;
 
-    proxy.web(req, res, { target: destino });
+        let domain = ndt.getDomain(req.headers.host);
+        let subdomain = ndt.getSubDomain(req.headers.host) || 'www';
 
-    console.info(` ${ destino == config["fallback"] ?  '❌' : '✔️'}  ${ [subdomain, domain].join('.') } > ${destino}`);
+        if (domain.endsWith(portsuffix))
+            domain = domain.split(portsuffix)[0];
 
-})
-.listen(config.port);
+        let destino = (
+            config["domains"] &&
+            config["domains"][domain] &&
+            config["domains"][domain][subdomain]
+        ) || config["fallback"];
 
-console.info("listening on port 80");
+        proxy.web(req, res, {
+            target: destino
+        });
 
+        console.info(` ${ destino == config["fallback"] ?  '❌' : '✔️'}  ${ [subdomain, domain].join('.') } > ${destino}`);
+    })
+    .listen(config.port);
+
+console.info('listening on port ' + config.port);

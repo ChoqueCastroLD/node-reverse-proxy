@@ -1,20 +1,19 @@
 module.exports = {
-	"port": process.env.PORT || 80,
-	"fallback": "http://127.0.0.1:3000",
-	"domains":{
+	'port': process.env.PORT || 90,
+	'fallback': 'http://127.0.0.1:3000',
+	'error_message': 'Something went wrong. And we are reporting a custom error message.',
+	'domains':{
 		// Domain
-		"luischoque.com": {
+		'localhost': {
 			// Subdomains
-			"": "http://127.0.0.1:3000",
-			"www":  "http://127.0.0.1:3000",
-			"api": "http://127.0.0.1:4000"
+			'www':  'http://127.0.0.1:3000',
+			'api': 'http://127.0.0.1:4000'
 		},
 		// Domain
-		"mysecretdomain.com": {
+		'mysecretdomain.com': {
 			// Subdomains
-			"": "http://127.0.0.1:5000",
-			"www":  "http://127.0.0.1:5000",
-			"api": "http://127.0.0.1:6000"
+			'www':  'http://127.0.0.1:5000',
+			'api': 'http://127.0.0.1:6000'
 		}
 	}
 }
