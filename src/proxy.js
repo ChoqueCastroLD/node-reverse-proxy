@@ -8,15 +8,8 @@ const ndt = require('nodedomain-util');
 const proxy = httpProxy.createProxyServer({});
 
 
-let config;
-
-function loadConfig () {
-    config = require('./config.js')
-}
-
-loadConfig();
-
-setInterval( () => loadConfig() , 3000);
+let config = require('./config.js');
+setInterval( () => config = , 3000);
 
 http.createServer( (req, res) => {
     
@@ -32,7 +25,7 @@ http.createServer( (req, res) => {
     console.info(` ${ destino == config["fallback"] ?  '❌' : '✔️'}  ${ [subdomain, domain].join('.') } > ${destino}`);
 
 })
-.listen(80);
+.listen(config.port);
 
 console.info("listening on port 80");
 
