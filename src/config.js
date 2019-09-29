@@ -1,4 +1,5 @@
 module.exports = {
+	"port": process.env.PORT || 80,
 	"fallback": "http://127.0.0.1:3000",
 	"domains":{
 		// Domain
