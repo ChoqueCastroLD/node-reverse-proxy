@@ -4,7 +4,7 @@
   "description": "A nodejs http reverse proxy implementation",
   "main": "src/proxy.js",
   "dependencies": {
-    "http-proxy": "^1.18.0",
+    "http-proxy": "^1.18.1",
     "nodedomain-util": "^1.6.0"
   },
   "scripts": {
